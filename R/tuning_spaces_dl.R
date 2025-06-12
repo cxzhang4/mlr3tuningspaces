@@ -84,7 +84,7 @@ vals = list(
   residual_dropout = to_tune(0, 0.2),
   attention_dropout = to_tune(0, 0.5),
   ffn_dropout = to_tune(0, 0.5),
-  ffn_factor = to_tune(2 / 3, 8 / 3),
+  ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE)
 )
