@@ -1,25 +1,23 @@
 #' @title Deep Learning Tuning Spaces
-#' 
+#'
 #' @name mlr_tuning_spaces_dl
-#' 
-#' @description 
+#'
+#' @description
 #' Tuning spaces for deep neural network architectures from the `r cite_bib("gorishniy2021revisting")` article.
 #' 
-#' @source 
+#' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
+#'
+#' @source
 #' `r format_bib("gorishniy2021revisting")`
-#' 
+#'
 #' @aliases
 #' mlr_tuning_spaces_classif.ft_transformer.default
-#' 
+#'
 #' @section FT-Transformer tuning space
 #' `r rd_info(lts("classif.ft_transformer.default"))`
-#' 
+#'
 #' @include mlr_tuning_spaces.R
 NULL
-
-# TODO: add proper documentation for the "hyperparameters"
-# in the article but not applicable here, such as weight decay,
-# which is a parameter for some optimizers like AdamW
 
 # mlp
 vals = c(
@@ -27,7 +25,8 @@ vals = c(
   neurons = to_tune(1, 1024),
   p = to_tune(0, 0.5),
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE)
+  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
+  epochs = 100
 )
 
 add_tuning_space(
@@ -56,7 +55,8 @@ vals = list(
   dropout1 = to_tune(0, 0.5),
   dropout2 = to_tune(0, 0.5),
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE)
+  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
+  epochs = 100
 )
 
 add_tuning_space(
@@ -86,7 +86,8 @@ vals = list(
   ffn_dropout = to_tune(0, 0.5),
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE)
+  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
+  epochs = 100
 )
 
 add_tuning_space(
