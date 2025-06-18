@@ -5,8 +5,10 @@
 #' @description
 #' Tuning spaces for deep neural network architectures from the `r cite_bib("gorishniy2021revisting")` article.
 #' 
+#' These tuning spaces require optimizers that have a `weight_decay` parameter, such as AdamW or any of the other optimizers built into `mlr3torch`.
+#' 
 #' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
-#'
+#' 
 #' @source
 #' `r format_bib("gorishniy2021revisting")`
 #'
