@@ -26,7 +26,8 @@ vals = c(
   p = to_tune(0, 0.5),
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  epochs = to_tune(upper = 100L, internal = TRUE)
+  epochs = to_tune(upper = 100L, internal = TRUE),
+  patience = 17
 )
 
 add_tuning_space(
@@ -56,7 +57,8 @@ vals = list(
   dropout2 = to_tune(0, 0.5),
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  epochs = to_tune(upper = 100L, internal = TRUE)
+  epochs = to_tune(upper = 100L, internal = TRUE),
+  patience = 17
 )
 
 add_tuning_space(
@@ -87,7 +89,8 @@ vals = list(
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  epochs = to_tune(upper = 100L, internal = TRUE)
+  epochs = to_tune(upper = 100L, internal = TRUE),
+  patience = 17
 )
 
 add_tuning_space(
