@@ -21,14 +21,6 @@
 #' @include mlr_tuning_spaces.R
 NULL
 
-rtdl_weight_decay_groups = function(net) {
-  # TODO: implement
-  # net: the network
-  # output: the param groups
-  # one group: Feature Tokenizer, biases in linear layers and normalization layers
-  # second group: all other params
-}
-
 # mlp
 vals = c(
   n_layers = to_tune(1, 16),
