@@ -90,6 +90,33 @@ add_tuning_space(
   label = "Regression Tabular ResNet with RTDL"
 )
 
+no_wd = function(name) {
+  # linear_bias_param = grepl("linear_", name, fixed = TRUE) && grepl(".bias", name, fixed = TRUE)
+
+  # other_no_wd_params = c("embedding", "_normalization")
+
+  other_no_wd_params = c("embedding", "_normalization", ".bias")
+
+  # return(
+  #   any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE)))
+  #   || linear_bias_param
+  # )
+
+  return(any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE))))
+}
+
+rtdl_param_groups = function(network) {
+  no_wd_idx = map_lgl(names(network$parameters), no_wd)
+  no_wd_group = network$parameters[no_wd_idx]
+
+  main_group = network$parameters[!no_wd_idx]
+
+  list(
+    list(params = main_group),
+    list(params = no_wd_group, weight_decay = 0)
+  )
+}
+
 # ft_transformer
 vals = list(
   n_blocks = to_tune(1, 6),
@@ -99,8 +126,10 @@ vals = list(
   ffn_dropout = to_tune(0, 0.5),
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
+  # TODO: only apply weight decay to one param group
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = ...,
+  # TODO: implement a function that separates the param groups into has_weight_decay and no_weight_decay
+  opt.param_groups = rtdl_param_groups,
   epochs = to_tune(upper = 100L, internal = TRUE),
   patience = 17
 )
