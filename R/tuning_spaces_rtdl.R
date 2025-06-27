@@ -91,25 +91,27 @@ add_tuning_space(
 )
 
 no_wd = function(name) {
-  # linear_bias_param = grepl("linear_", name, fixed = TRUE) && grepl(".bias", name, fixed = TRUE)
+  # implementation from paper description
+  linear_bias_param = grepl("linear_", name, fixed = TRUE) && grepl(".bias", name, fixed = TRUE)
 
-  # other_no_wd_params = c("embedding", "_normalization")
+  other_no_wd_params = c("embedding", "_normalization")
 
-  other_no_wd_params = c("embedding", "_normalization", ".bias")
+  return(
+    any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE)))
+    || linear_bias_param
+  )
 
-  # return(
-  #   any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE)))
-  #   || linear_bias_param
-  # )
+  # implementation in https://github.com/yandex-research/rtdl-revisiting-models/blob/main/package/rtdl_revisiting_models.py
+  # other_no_wd_params = c("embedding", "_normalization", ".bias")
 
-  return(any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE))))
+  # return(any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE))))
 }
 
-rtdl_param_groups = function(network) {
-  no_wd_idx = map_lgl(names(network$parameters), no_wd)
-  no_wd_group = network$parameters[no_wd_idx]
+rtdl_param_groups = function(parameters) {
+  no_wd_idx = map_lgl(names(parameters), no_wd)
+  no_wd_group = parameters[no_wd_idx]
 
-  main_group = network$parameters[!no_wd_idx]
+  main_group = parameters[!no_wd_idx]
 
   list(
     list(params = main_group),
