@@ -36,7 +36,6 @@ vals = c(
   p = to_tune(0, 0.5),
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = ...,
   epochs = to_tune(upper = 100L, internal = TRUE),
   patience = 17
 )
@@ -68,7 +67,6 @@ vals = list(
   dropout2 = to_tune(0, 0.5),
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = ...,
   epochs = to_tune(upper = 100L, internal = TRUE),
   patience = 17,
   opt.param_groups = rtdl_weight_decay_groups
