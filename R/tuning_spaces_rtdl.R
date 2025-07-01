@@ -60,8 +60,7 @@ vals = list(
   opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
   epochs = to_tune(upper = 100L, internal = TRUE),
-  patience = 17,
-  opt.param_groups = rtdl_weight_decay_groups
+  patience = 17
 )
 
 add_tuning_space(
@@ -116,9 +115,9 @@ vals = list(
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = rtdl_param_groups,
+  opt.param_groups = to_tune(list(rtdl_param_groups = rtdl_param_groups)),
   epochs = to_tune(upper = 100L, internal = TRUE),
-  patience = 17
+  patience = to_tune(17L, 17L)
 )
 
 add_tuning_space(
