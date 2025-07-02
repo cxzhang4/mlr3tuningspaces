@@ -9,7 +9,7 @@
 #'
 #' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
 #' 
-#' In the FT-Transformer, the `validate` parameter must be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2)`.
+#' In the FT-Transformer, the `validate` parameter must be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2, measures_valid = msr("regr.rmse"))`.
 #'
 #' @source
 #' `r format_bib("gorishniy2021revisiting")`
