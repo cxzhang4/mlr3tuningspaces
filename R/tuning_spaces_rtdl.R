@@ -8,6 +8,8 @@
 #' These tuning spaces require optimizers that have a `weight_decay` parameter, such as AdamW or any of the other optimizers built into `mlr3torch`.
 #'
 #' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
+#' 
+#' In the FT-Transformer, the `validate` parameter must be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2)`.
 #'
 #' @source
 #' `r format_bib("gorishniy2021revisiting")`
@@ -117,7 +119,21 @@ vals = list(
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
   opt.param_groups = to_tune(list(rtdl_param_groups = rtdl_param_groups)),
   epochs = to_tune(upper = 100L, internal = TRUE),
-  patience = to_tune(17L, 17L)
+  patience = 17L
+)
+
+vals = list(
+  n_blocks = to_tune(1, 6),
+  d_token = to_tune(p_int(8, 64, trafo = function(x) 8 * x)),
+  residual_dropout = to_tune(0, 0.2),
+  attention_dropout = to_tune(0, 0.5),
+  ffn_dropout = to_tune(0, 0.5),
+  ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
+  opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
+  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
+  opt.param_groups = to_tune(list(rtdl_param_groups = rtdl_param_groups)),
+  epochs = to_tune(upper = 100L, internal = TRUE),
+  patience = 17L
 )
 
 add_tuning_space(
