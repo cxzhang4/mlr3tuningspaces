@@ -110,20 +110,6 @@ rtdl_param_groups = function(parameters) {
 # ft_transformer
 vals = list(
   n_blocks = to_tune(1, 6),
-  d_token = to_tune(64, 512),
-  residual_dropout = to_tune(0, 0.2),
-  attention_dropout = to_tune(0, 0.5),
-  ffn_dropout = to_tune(0, 0.5),
-  ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
-  opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = to_tune(list(rtdl_param_groups = rtdl_param_groups)),
-  epochs = to_tune(upper = 100L, internal = TRUE),
-  patience = 17L
-)
-
-vals = list(
-  n_blocks = to_tune(1, 6),
   d_token = to_tune(p_int(8, 64, trafo = function(x) 8 * x)),
   residual_dropout = to_tune(0, 0.2),
   attention_dropout = to_tune(0, 0.5),
