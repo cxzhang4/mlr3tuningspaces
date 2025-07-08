@@ -84,7 +84,6 @@ add_tuning_space(
 )
 
 no_wd = function(name) {
-  # implementation from paper description
   linear_bias_param = grepl("linear_", name, fixed = TRUE) && grepl(".bias", name, fixed = TRUE)
 
   other_no_wd_params = c("embedding", "_normalization")
@@ -110,7 +109,7 @@ rtdl_param_groups = function(parameters) {
 # ft_transformer
 vals = list(
   n_blocks = to_tune(1, 6),
-  d_token = to_tune(p_int(8, 64, trafo = function(x) 8 * x)),
+  d_token = to_tune(p_int(8, 64, trafo = function(x) 8L * x)),
   residual_dropout = to_tune(0, 0.2),
   attention_dropout = to_tune(0, 0.5),
   ffn_dropout = to_tune(0, 0.5),
