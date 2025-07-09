@@ -3,22 +3,33 @@
 #' @name mlr_tuning_spaces_rtdl
 #'
 #' @description
-#' Tuning spaces for deep neural network architectures from the `r cite_bib("gorishniy2021revisting")` article.
+#' Tuning spaces for deep neural network architectures from the `r cite_bib("gorishniy2021revisiting")` article.
 #'
 #' These tuning spaces require optimizers that have a `weight_decay` parameter, such as AdamW or any of the other optimizers built into `mlr3torch`.
 #'
 #' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
-#' 
-#' In the FT-Transformer, the `validate` parameter must be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2, measures_valid = msr("regr.rmse"))`.
 #'
 #' @source
 #' `r format_bib("gorishniy2021revisiting")`
 #'
 #' @aliases
+#' mlr_tuning_spaces_classif.mlp.rtdl
+#' mlr_tuning_spaces_classif.tab_resnet.rtdl
 #' mlr_tuning_spaces_classif.ft_transformer.rtdl
-#'
-#' @section FT-Transformer tuning space
+#' mlr_tuning_spaces_regr.mlp.rtdl
+#' mlr_tuning_spaces_regr.tab_resnet.rtdl
+#' mlr_tuning_spaces_regr.ft_transformer.rtdl
+#' 
+#' @section MLP tuning space:
+#' `r rd_info(lts("classif.mlp.rtdl"))`
+#' 
+#' @section Tabular ResNet tuning space:
+#' `r rd_info(lts("classif.tab_resnet.rtdl"))`
+#' 
+#' @section FT-Transformer tuning space:
 #' `r rd_info(lts("classif.ft_transformer.rtdl"))`
+#' 
+#' In the FT-Transformer, the `validate` parameter must be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2, measures_valid = msr("regr.rmse"))`.
 #'
 #' @include mlr_tuning_spaces.R
 NULL
@@ -116,8 +127,8 @@ vals = list(
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
   opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = to_tune(list(rtdl_param_groups = rtdl_param_groups)),
-  epochs = to_tune(upper = 100L, internal = TRUE),
+  opt.param_groups = rtdl_param_groups,
+  epochs = to_tune(lower = 1L, upper = 100L, internal = TRUE),
   patience = 17L
 )
 
