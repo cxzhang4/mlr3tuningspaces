@@ -29,20 +29,20 @@
 #' @section FT-Transformer tuning space:
 #' `r rd_info(lts("classif.ft_transformer.rtdl"))`
 #' 
-#' In the FT-Transformer, the `validate` parameter must be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2, measures_valid = msr("regr.rmse"))`.
+#' In the FT-Transformer, the validation-related parameters must still be set manually, via e.g. `lts("regr.ft_transformer.rtdl")$get_learner(validate = 0.2, measures_valid = msr("regr.rmse"))`.
 #'
 #' @include mlr_tuning_spaces.R
 NULL
 
 # mlp
 vals = list(
-  n_layers = to_tune(1, 16),
-  neurons = to_tune(1, 1024),
-  p = to_tune(0, 0.5),
-  opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  epochs = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience = to_tune(lower = 17L, upper = 17L)
+  n_layers          = to_tune(1, 16),
+  neurons           = to_tune(levels = 1:1024),
+  p                 = to_tune(0, 0.5),
+  opt.lr            = to_tune(1e-5, 1e-2, logscale = TRUE),
+  opt.weight_decay  = to_tune(1e-6, 1e-3, logscale = TRUE),
+  epochs            = to_tune(lower = 1L, upper = 100L, internal = TRUE),
+  patience          = to_tune(lower = 17L, upper = 17L)
 )
 
 add_tuning_space(
@@ -65,15 +65,15 @@ add_tuning_space(
 
 # resnet
 vals = list(
-  n_blocks = to_tune(1, 16),
-  d_block = to_tune(64, 1024),
+  n_blocks            = to_tune(1, 16),
+  d_block             = to_tune(64, 1024),
   d_hidden_multiplier = to_tune(1, 4),
-  dropout1 = to_tune(0, 0.5),
-  dropout2 = to_tune(0, 0.5),
-  opt.lr = to_tune(1e-5, 1e-2, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  epochs = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience = to_tune(lower = 17L, upper = 17L)
+  dropout1            = to_tune(0, 0.5),
+  dropout2            = to_tune(0, 0.5),
+  opt.lr              = to_tune(1e-5, 1e-2, logscale = TRUE),
+  opt.weight_decay    = to_tune(1e-6, 1e-3, logscale = TRUE),
+  epochs              = to_tune(lower = 1L, upper = 100L, internal = TRUE),
+  patience            = to_tune(lower = 17L, upper = 17L)
 )
 
 add_tuning_space(
@@ -95,14 +95,9 @@ add_tuning_space(
 )
 
 no_wd = function(name) {
-  linear_bias_param = grepl("linear_", name, fixed = TRUE) && grepl(".bias", name, fixed = TRUE)
+  no_wd_params = c("embedding", "_normalization", ".bias")
 
-  other_no_wd_params = c("embedding", "_normalization")
-
-  return(
-    any(map_lgl(other_no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE)))
-    || linear_bias_param
-  )
+  return(any(map_lgl(no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE))))
 }
 
 rtdl_param_groups = function(parameters) {
@@ -119,17 +114,17 @@ rtdl_param_groups = function(parameters) {
 
 # ft_transformer
 vals = list(
-  n_blocks = to_tune(1, 6),
-  d_token = to_tune(p_int(8, 64, trafo = function(x) 8L * x)),
-  residual_dropout = to_tune(0, 0.2),
-  attention_dropout = to_tune(0, 0.5),
-  ffn_dropout = to_tune(0, 0.5),
+  n_blocks                = to_tune(1, 6),
+  d_token                 = to_tune(p_int(8L, 64L, trafo = function(x) 8L * x)),
+  residual_dropout        = to_tune(0, 0.2),
+  attention_dropout       = to_tune(0, 0.5),
+  ffn_dropout             = to_tune(0, 0.5),
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
-  opt.lr = to_tune(1e-5, 1e-3, logscale = TRUE),
-  opt.weight_decay = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups = to_tune(levels = list(rtdl_param_groups)),
-  epochs = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience = to_tune(lower = 17L, upper = 17L)
+  opt.lr                  = to_tune(1e-5, 1e-3, logscale = TRUE),
+  opt.weight_decay        = to_tune(1e-6, 1e-3, logscale = TRUE),
+  opt.param_groups        = to_tune(levels = list(rtdl_param_groups)),
+  epochs                  = to_tune(lower = 1L, upper = 100L, internal = TRUE),
+  patience                = to_tune(lower = 17L, upper = 17L)
 )
 
 add_tuning_space(
