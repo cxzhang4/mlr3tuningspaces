@@ -9,6 +9,9 @@
 #'
 #' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
 #' 
+#' The FT-Transformer tuning space disables weight decay for all bias parameters, matching the implementation provided by the authors in the rtdl-revisiting-models package. 
+#' However, this differs from the experiments described in the article, which states that the
+#' 
 #' For the FT-Transformer, if training is unstable, consider a combination of standardizing features, using an adaptive optimizer (e.g. Adam), reducing the learning rate,
 #' and using a learning rate scheduler.
 #'
@@ -98,6 +101,8 @@ add_tuning_space(
 )
 
 no_wd = function(name) {
+  # TODO: refactor, since we call it "Tokenizer", so the module does not have embedding in the name
+  # furthermore, the tokenizer modules seem to end up unnamed anyway
   no_wd_params = c("embedding", "_normalization", ".bias")
 
   return(any(map_lgl(no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE))))
