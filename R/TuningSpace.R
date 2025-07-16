@@ -175,6 +175,8 @@ rd_info.TuningSpace = function(obj, ...) { # nolint
   ps = lrn(obj$learner)$param_set
   x = c("",
     imap_chr(obj$values, function(space, name) {
+      # if numeric value, pirnt the value
+      browser()
       switch(ps$params[name, , on = "id"]$cls,
         "ParamLgl" = sprintf("* %s \\[%s\\]", name, as_short_string(space$content$levels[[1]])),
         "ParamFct" = sprintf("* %s \\[%s\\]", name, rd_format_string(space$content$levels[[1]])),

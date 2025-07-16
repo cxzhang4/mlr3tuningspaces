@@ -8,6 +8,9 @@
 #' These tuning spaces require optimizers that have a `weight_decay` parameter, such as AdamW or any of the other optimizers built into `mlr3torch`.
 #'
 #' When the article suggests multiple ranges for a given hyperparameter, these tuning spaces choose the widest range.
+#' 
+#' For the FT-Transformer, if training is unstable, consider a combination of standardizing features, using an adaptive optimizer (e.g. Adam), reducing the learning rate,
+#' and using a learning rate scheduler.
 #'
 #' @source
 #' `r format_bib("gorishniy2021revisiting")`
@@ -42,7 +45,7 @@ vals = list(
   opt.lr            = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay  = to_tune(1e-6, 1e-3, logscale = TRUE),
   epochs            = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience          = to_tune(lower = 17L, upper = 17L)
+  patience          = to_tune(p_fct(17L))
 )
 
 add_tuning_space(
@@ -73,7 +76,7 @@ vals = list(
   opt.lr              = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay    = to_tune(1e-6, 1e-3, logscale = TRUE),
   epochs              = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience            = to_tune(lower = 17L, upper = 17L)
+  patience            = to_tune(p_fct(17L))
 )
 
 add_tuning_space(
@@ -116,15 +119,16 @@ rtdl_param_groups = function(parameters) {
 vals = list(
   n_blocks                = to_tune(1, 6),
   d_token                 = to_tune(p_int(8L, 64L, trafo = function(x) 8L * x)),
+  attention_n_heads       = to_tune(p_fct(8L)),
   residual_dropout        = to_tune(0, 0.2),
   attention_dropout       = to_tune(0, 0.5),
   ffn_dropout             = to_tune(0, 0.5),
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
-  opt.lr                  = to_tune(1e-5, 1e-3, logscale = TRUE),
+  opt.lr                  = to_tune(1e-5, 1e-4, logscale = TRUE),
   opt.weight_decay        = to_tune(1e-6, 1e-3, logscale = TRUE),
   opt.param_groups        = to_tune(levels = list(rtdl_param_groups)),
   epochs                  = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience                = to_tune(lower = 17L, upper = 17L)
+  patience                = to_tune(p_fct(17L))
 )
 
 add_tuning_space(
