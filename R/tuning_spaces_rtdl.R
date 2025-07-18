@@ -124,7 +124,7 @@ rtdl_param_groups = function(parameters) {
 vals = list(
   n_blocks                = to_tune(1, 6),
   d_token                 = to_tune(p_int(8L, 64L, trafo = function(x) 8L * x)),
-  attention_n_heads       = to_tune(p_fct(8L)),
+  attention_n_heads       = 8L,
   residual_dropout        = to_tune(0, 0.2),
   attention_dropout       = to_tune(0, 0.5),
   ffn_dropout             = to_tune(0, 0.5),

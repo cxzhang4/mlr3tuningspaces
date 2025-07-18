@@ -186,9 +186,6 @@ rd_info.TuningSpace = function(obj, ...) { # nolint
   ps = lrn(obj$learner)$param_set
   x = c("",
     imap_chr(obj$values, function(space, name) {
-      # if numeric value, print the value
-      # if (name == "opt.param_groups") browser()
-      # if (name == "d_block") browser()
       if (is.atomic(space)) {
         sprintf("* %s %s", name, space)
       } else if ("TuneToken" %nin% class(space)) {
