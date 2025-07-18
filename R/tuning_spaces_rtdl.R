@@ -48,7 +48,7 @@ vals = list(
   opt.lr            = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay  = to_tune(1e-6, 1e-3, logscale = TRUE),
   epochs            = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience          = to_tune(p_fct(17L))
+  patience          = 17L
 )
 
 add_tuning_space(
@@ -79,7 +79,7 @@ vals = list(
   opt.lr              = to_tune(1e-5, 1e-2, logscale = TRUE),
   opt.weight_decay    = to_tune(1e-6, 1e-3, logscale = TRUE),
   epochs              = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience            = to_tune(p_fct(17L))
+  patience            = 17L
 )
 
 add_tuning_space(
@@ -101,7 +101,7 @@ add_tuning_space(
 )
 
 no_wd = function(name) {
-  # TODO: refactor, since we call it "Tokenizer", so the module does not have embedding in the name
+  # TODO: refactor, since we call it "Tokenizer", so the module does not have "embedding" in the name
   # furthermore, the tokenizer modules seem to end up unnamed anyway
   no_wd_params = c("embedding", "_normalization", ".bias")
 
@@ -131,9 +131,9 @@ vals = list(
   ffn_d_hidden_multiplier = to_tune(2 / 3, 8 / 3),
   opt.lr                  = to_tune(1e-5, 1e-4, logscale = TRUE),
   opt.weight_decay        = to_tune(1e-6, 1e-3, logscale = TRUE),
-  opt.param_groups        = to_tune(levels = list(rtdl_param_groups)),
+  opt.param_groups        = rtdl_param_groups,
   epochs                  = to_tune(lower = 1L, upper = 100L, internal = TRUE),
-  patience                = to_tune(p_fct(17L))
+  patience                = 17L
 )
 
 add_tuning_space(
