@@ -101,15 +101,20 @@ add_tuning_space(
 )
 
 no_wd = function(name) {
-  # TODO: refactor, since we call it "Tokenizer", so the module does not have "embedding" in the name
-  # furthermore, the tokenizer modules seem to end up unnamed anyway
-  no_wd_params = c("embedding", "_normalization", ".bias")
+  # this will also disable weight decay for the input projection bias of the attention heads
+  no_wd_params = c("_normalization", "bias")
 
   return(any(map_lgl(no_wd_params, function(pattern) grepl(pattern, name, fixed = TRUE))))
 }
 
 rtdl_param_groups = function(parameters) {
-  no_wd_idx = map_lgl(names(parameters), no_wd)
+  ffn_norm_idx = grepl("ffn_normalization", names(parameters), fixed = TRUE)
+  ffn_norm_num_in_module_list = as.integer(strsplit(names(parameters)[ffn_norm_idx][1], ".", fixed = TRUE)[[1]][2])
+  cls_num_in_module_list = ffn_norm_num_in_module_list - 1
+  nums_in_module_list = sapply(strsplit(names(parameters), ".", fixed = TRUE), function(x) as.integer(x[2]))
+  tokenizer_idx = nums_in_module_list < cls_num_in_module_list
+
+  no_wd_idx = map_lgl(names(parameters), no_wd) | tokenizer_idx
   no_wd_group = parameters[no_wd_idx]
 
   main_group = parameters[!no_wd_idx]
